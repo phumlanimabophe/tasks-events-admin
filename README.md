@@ -2,23 +2,8 @@
 
 [Optional: Include a video thumbnail here if applicable]
 
-This project implements a user-friendly task management system built with the Django framework. It allows users to create, assign, prioritize, and track tasks efficiently.
-
-## Key Features
-
-- **User Authentication**: Secure login system for enhanced data privacy.
-- **Role-Based Access Control**: Differentiates between regular users and administrators, granting appropriate permissions.
-- **Comprehensive Task Management**:
-  - Create, edit, and delete tasks with ease.
-  - Assign tasks to specific users for collaborative work.
-  - Prioritize tasks effectively using a flexible priority system.
-  - Track task statuses (e.g., To Do, In Progress, Completed) for progress monitoring.
-  - Set due dates for timely task completion.
-  - Provide detailed descriptions for enhanced task clarity.
-- **Secure Data Handling**: Utilizes environment variables to store sensitive information outside the Git repository, ensuring security.
-- **Database Flexibility**: Supports both SQLite (provided by default) and PostgreSQL for database management, offering flexibility in deployment.
-- **User-Friendly Interface**: Leverages HTML, CSS, and Bootstrap templates for a visually appealing and intuitive user experience.
-- **Streamlined Form Handling**: Employs Django-Crispy-Forms for efficient and user-friendly form creation.
+## Overview:
+**This project is a robust task management system built with Django, designed for efficient task creation, assignment, prioritization, and tracking. It features secure user authentication, role-based access control, and a user-friendly interface powered by Bootstrap. Tasks can be categorized by status, assigned to users, and given due dates for better organization. The system ensures secure data handling using environment variables and supports both SQLite and PostgreSQL for flexible database management. With Django-Crispy-Forms, form handling is streamlined, enhancing usability.
 
 ## Getting Started
 
