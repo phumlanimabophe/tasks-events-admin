@@ -1,0 +1,94 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block title %}Task Table{% endblock title %}
+
+{% block content %}
+
+
+
+  <div class="pc-container">
+    <div class="pc-content">
+      <div class="page-header">
+        <div class="page-block">
+          <div class="row align-items-center">
+            <div class="col-md-12">
+              <div class="page-header-title">
+                <h5 class="mb-0">Task Lists</h5>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <ul class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url "index" %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="javascript: void(0)">Tasks</a></li>
+                <li class="breadcrumb-item" aria-current="page">Calender</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="tile">
+                                <div class="tile-body">
+                                    <div class="table-responsive" style="height: 500px; overflow-y: auto;">
+                                        <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <table class="table table-hover table-bordered dataTable no-footer" id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <th class="sorting_asc" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="SL: activate to sort column descending" style="width: 100px;">SL</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Task Title: activate to sort column ascending" style="width: 200px;">Task Title</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Due Date: activate to sort column ascending" style="width: 180px;">Due Date</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Priority: activate to sort column ascending" style="width: 120px;">Priority</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Status: activate to sort column ascending" style="width: 120px;">Status</th>
+                                                                <th class="sorting" tabindex="0" aria-controls="sampleTable" rowspan="1" colspan="1" aria-label="Assigned To: activate to sort column ascending" style="width: 150px;">Assigned To</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for task in object_list %}
+                                                            <tr role="row" class="odd">
+                                                                <td class="sorting_1">{{ forloop.counter }}</td>
+                                                                <td>{{ task.title }}</td>
+                                                                <td>{{ task.due_date }}</td>
+                                                                <td>{{ task.priority }}</td>
+                                                                <td>{{ task.status }}</td>
+                                                                <td>{{ task.assigned_to }}</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+  </div>
+{% endblock content %}
+
+
+
+{% block extra_js %}
+ 
+
+   <script type="text/javascript" src="{% static 'js/plugins/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/dataTables.bootstrap.min.js' %}"></script>
+    <script type="text/javascript">$('#sampleTable').DataTable();</script>
+
+
+{% endblock extra_js %}

@@ -1,0 +1,330 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Color{% endblock title %}
+{% block extracss %}
+  <link href="{% static 'calender/main.css' %}" rel="stylesheet" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+{% endblock extracss %}
+{% block content %}
+
+  <div class="pc-container">
+    <div class="pc-content">
+      <div class="page-header">
+        <div class="page-block">
+          <div class="row align-items-center">
+            <div class="col-md-12">
+              <div class="page-header-title">
+                <h5 class="mb-0">Calender</h5>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <ul class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url "index" %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="javascript: void(0)">My Tasks</a></li>
+                <li class="breadcrumb-item" aria-current="page">Calender</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-body">
+           <div class="row">
+    <div class="col-md-12">
+        <div class="tile row">
+            <div class="col-md-3">
+                <div id="external-events">
+
+    <h6 class="mb-3 text-secondary">active Tasks</h6>
+
+    {% for event in events_month %}
+        <div class="fc-event p-3 mb-2 rounded shadow-sm border">
+            <h5 class="mb-1 text-success">{{ event.title }}</h5>
+            <p class="mb-1 text-muted"><small>{{ event.description }}</small></p>
+        </div>
+    {% empty %}
+        <p class="text-muted">No Running Events Found</p>
+    {% endfor %}
+</div>
+
+            </div>
+
+
+<div class="col-md-9">
+
+ <div class="d-flex justify-content-between mb-3">
+    {% if request.user.is_superuser or request.user.is_admin %}
+    <button type="button"
+            class="btn mx-2 {% if filter_by_name == 'all' %}btn-success{% else %}btn-outline-success{% endif %}"
+            onclick="setFilter('all')">All</button>
+    {% endif %}
+    <button type="button"
+            class="btn mx-2 {% if filter_by_name == 'created_by' %}btn-success{% else %}btn-outline-success{% endif %}"
+            onclick="setFilter('created_by')">Created By</button>
+    <button type="button"
+            class="btn mx-2 {% if filter_by_name == 'assigned_to' %}btn-success{% else %}btn-outline-success{% endif %}"
+            onclick="setFilter('assigned_to')">Assigned To</button>
+</div>
+
+
+    <form id="filterForm" method="POST">
+         {% csrf_token %}
+        <input type="hidden" id="filterType" name="filterType" value="all">
+        <button type="submit" id="hiddenSubmit" style="display: none;"></button>
+    </form>
+
+    <div id="calendar"></div>
+</div>
+
+<script>
+    // Set the filter value and submit the form
+    function setFilter(filterType) {
+        document.getElementById('filterType').value = filterType;
+        document.getElementById('filterForm').submit();
+    }
+</script>
+
+
+
+
+
+                <div class="modal fade show" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+    <div class="modal-header">
+                            <div class="text-center">
+                <a href="{% url "index" %}">
+                  <div>
+                    <img src="{% static "assets/images/PPOTTS Logo 2023.avif" %}" alt="img" style="width: 200px;">
+                  </div>
+
+                </a>
+              </div>
+                   <button id="modalClose1" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                      </div>
+                      <div class="modal-body">
+          <form method="post" id="calendar-form">
+            {% csrf_token %}
+            {% crispy calender_task_form %}
+  
+          </form>
+          <form id="myForm"  method="post">
+            {% csrf_token %}
+            <input type="hidden" id="hiddenField" name="event_id">
+           
+        </form>
+      </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade show" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <div class="text-center">
+                      <a href="{% url 'index' %}">
+                        <div>
+                          <img src="{% static 'assets/images/PPOTTS Logo 2023.avif' %}" alt="img" style="width: 200px;">
+                        </div>
+                      </a>
+                    </div>
+                    
+                    <button id="delete-event-button" data-event-id="" type="button" class="btn btn-danger">Delete</button>
+                
+                    <button id="modalClose2" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                 
+                  </div> <div class="modal-body">
+                  <form method="post">
+                    {% csrf_token %}
+                   
+        
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label"><h6 id="title_event_detail"></h6>
+                        <p id="start_event_detail"></p></label>
+                      </div>
+                      {% csrf_token %}
+                    {% crispy form_edit %}
+    
+                    
+                  </form> 
+</div>
+               
+                  
+                      
+                
+                </div>
+              </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+{% endblock content %}
+
+
+{% block extra_js %}
+
+  <script src="{% static "assets/js/plugins/clipboard.min.js" %}"></script>
+  <script>
+    window.addEventListener('load', (event) => {
+      var i_clip = new ClipboardJS('.color-block');
+      i_clip.on('success', function (e) {
+        var targetElement = e.trigger;
+        let icon_badge = document.createElement('span');
+        icon_badge.setAttribute('class', 'ic-badge badge bg-success float-end');
+        icon_badge.innerHTML = "copied";
+        targetElement.append(icon_badge);
+        setTimeout(function () {
+          targetElement.children[0].remove();
+        }, 3000);
+      });
+
+      i_clip.on('error', function (e) {
+        var targetElement = e.trigger;
+        let icon_badge = document.createElement('span');
+        icon_badge.setAttribute('class', 'ic-badge badge bg-danger float-end');
+        icon_badge.innerHTML = "Error";
+        targetElement.append(icon_badge);
+        setTimeout(function () {
+          targetElement.children[0].remove();
+        }, 3000);
+      });
+    });
+  </script>
+  <script src="{% static 'calender/main.js' %}"></script>
+<script>
+function converterToDareTimeFormat(data) {
+    const dataJS = new Date(data);
+    const year = dataJS.getFullYear();
+    const month = (dataJS.getMonth() + 1).toString().padStart(2, '0');
+    const day = dataJS.getDate().toString().padStart(2, '0');
+    const hour = dataJS.getHours().toString().padStart(2, '0');
+    const minute = dataJS.getMinutes().toString().padStart(2, '0');
+    const second = dataJS.getSeconds().toString().padStart(2, '0');
+    const formatoDjango = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+    return formatoDjango;
+}
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      
+      var calendarEl = document.getElementById('calendar');
+      var today = new Date();
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,list'
+        },
+        initialDate: today,
+        navLinks: true,
+        selectable: true,
+        selectMirror: true,
+        select: function(arg) {
+          var modal = document.getElementById('eventModal')
+          modal.style.display = 'block'
+          document.getElementById('id_end_time').value = converterToDareTimeFormat(arg.start);
+          calendar.unselect()
+        },
+
+        eventClick: function (arg) {
+    var title = arg.event.title;
+
+
+    var start = formatDateTime(arg.event.start);
+    var end = formatDateTime(arg.event.end);
+    var description = arg.event.extendedProps.description || '';
+    var priority = arg.event.extendedProps.priority || '';
+    var status = arg.event.extendedProps.status || '';
+    var assigned_to = arg.event.extendedProps.assigned_to || '';
+    var id = arg.event.id;
+
+
+    var modal = document.getElementById('detailModal');
+ 
+    var modalStart = document.getElementById('start_event_detail');
+   var modalTitle = document.getElementById('title_event_detail');
+    var deleteButton = document.getElementById('delete-event-button');
+
+
+
+    if (!modal || !modalTitle || !modalStart ) {
+        console.error("One or more modal elements are missing. Please check the IDs.");
+        return;
+    }
+
+    deleteButton?.setAttribute("data-event-id", id);
+
+    modalTitle.textContent = title;
+    modalStart.textContent = start;
+ 
+    modal.style.display = 'block';
+    document.getElementById('edit_due_date').value = converterToDareTimeFormat(arg.event.start);
+    document.getElementById('edit_description').value = description;
+    document.getElementById('edit_title').value = title;
+    document.getElementById('edit_priority').value = priority;
+    document.getElementById('edit_status').value = status;
+    document.getElementById('edit_assigned_to').value = assigned_to;
+    document.getElementById('edit_id').value = id;
+  
+},
+
+        editable: true,
+        dayMaxEvents: true,
+        events: {{calender_tasks | safe}},
+      });
+
+      calendar.render();
+    });
+
+    const closeBtn1 = document.getElementById('modalClose1');
+    const closeBtn2 = document.getElementById('modalClose2');
+
+    closeBtn1.addEventListener('click',()=>{
+      const eventModal = document.getElementById('eventModal')
+      eventModal.style.display = 'none';
+    });
+
+    closeBtn2.addEventListener('click',()=>{
+      const detailModal = document.getElementById('detailModal')
+      detailModal.style.display = 'none';
+    });
+
+    function formatDateTime(dateTime) {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' };
+      const dataFormatada = new Date(dateTime).toLocaleDateString('en-US', options);
+      return dataFormatada;
+    };
+
+    document.getElementById('delete-event-button').addEventListener('click', function() {
+    const eventId = this.getAttribute('data-event-id');
+    
+    if (confirm('Are you sure you want to delete this event?')) {
+        document.getElementById('hiddenField').value = eventId;
+        
+        document.getElementById('myForm').submit();
+    }
+});
+
+</script>
+
+{% endblock extra_js %}

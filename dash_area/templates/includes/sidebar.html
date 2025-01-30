@@ -1,0 +1,142 @@
+{% load static %}
+
+<nav class="pc-sidebar">
+  <div class="navbar-wrapper">
+    <br>
+    <div class="m-header">
+      <a href='{% url "index" %}' class="b-brand text-primary">
+        <img src='{% static "assets/images/PPOTTS Logo 2023.avif" %}' class="img-fluid" alt="logo">
+      </a>
+    </div>
+    <div class="navbar-content">
+
+      <ul class="pc-navbar">
+
+        <li class="pc-item pc-caption">
+          <label>Navigation</label>
+        </li>
+        <li class="pc-item">
+          <a href='{% url "index" %}' class="pc-link">
+            <span class="pc-micon">
+              <i data-feather="home"></i>
+            </span>
+            <span class="pc-mtext">Dashboard</span>
+          </a>
+        </li>
+               {% if request.user.is_authenticated %}
+<li class="pc-item">
+          <a href='{% url "profile_update" %}' class="pc-link">
+            <span class="pc-micon">
+              <i data-feather="home"></i>
+            </span>
+            <span class="pc-mtext">Profile</span>
+          </a>
+        </li>
+         {% endif %}
+        {% if request.user.is_authenticated %}
+        <li class="pc-item pc-caption">
+          <label>Tasks</label>
+          <i data-feather="clipboard"></i>
+        </li>
+        <li class="pc-item">
+          <a href='{% url "calender" %}' class="pc-link">
+            <span class="pc-micon"><i data-feather="calendar"></i></span>
+            <span class="pc-mtext">Calender</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href='{% url "all_tasks" %}' class="pc-link">
+            <span class="pc-micon"><i data-feather="list"></i></span>
+            <span class="pc-mtext">All Tasks</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href='{% url "new_tasks" %}' class="pc-link">
+            <span class="pc-micon"><i data-feather="clock"></i></span>
+            <span class="pc-mtext">Upcoming Tasks</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href='{% url "ongoing_tasks" %}' class="pc-link">
+            <span class="pc-micon"><i data-feather="activity"></i></span>
+            <span class="pc-mtext">Ongoing Tasks</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href='{% url "completed_tasks" %}' class="pc-link">
+            <span class="pc-micon"><i data-feather="check-circle"></i></span>
+            <span class="pc-mtext">Completed Tasks</span>
+          </a>
+        </li>
+        {% endif %}
+
+        {% if request.user.is_superuser or request.user.is_admin %}
+        <li class="pc-item pc-caption">
+          <label>Admin Use</label>
+          <i data-feather="settings"></i>
+        </li>
+        <li class="pc-item">
+          <a href='{% url "task_form_view" %}' class="pc-link">
+            <span class="pc-micon"><i data-feather="file-plus"></i></span>
+            <span class="pc-mtext">Create Task</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href='{% url "management_table" %}' class="pc-link">
+            <span class="pc-micon"><i data-feather="list"></i></span>
+            <span class="pc-mtext">Tasks List</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href='{% url "register_user" %}' class="pc-link">
+            <span class="pc-micon"><i data-feather="user-plus"></i></span>
+            <span class="pc-mtext">Register New User</span>
+          </a>
+        </li>
+
+        {% endif %}
+        <li class="pc-item pc-caption">
+          <label>Authentication</label>
+          <i data-feather="monitor"></i>
+        </li>
+        {% if not request.user.is_authenticated %}
+        <li class="pc-item">
+          <a href='{% url "login" %}' class="pc-link">
+            <span class="pc-micon"><i data-feather="lock"></i></span>
+            <span class="pc-mtext">Login</span>
+          </a>
+        </li>
+        <li class="pc-item">
+          <a href='{% url "register" %}' class="pc-link">
+            <span class="pc-micon"><i data-feather="user-plus"></i></span>
+            <span class="pc-mtext">Register</span>
+          </a>
+        </li>
+        {% else %}
+      <li class="pc-item">
+  <a href='{% url "password_change" %}' class="pc-link">
+    <span class="pc-micon">
+      <i class="fas fa-key me-2"></i>
+    </span>
+    <span class="pc-mtext">Change Password</span>
+  </a>
+</li>
+
+<li class="pc-item">
+  <a href='{% url "logout" %}' class="pc-link">
+    <span class="pc-micon">
+      <i class="fas fa-sign-out-alt me-2"></i>
+    </span>
+    <span class="pc-mtext">Logout</span>
+  </a>
+</li>
+           <br>
+        {% endif %}
+
+
+
+      </ul>
+
+    </div>
+  </div>
+</nav>

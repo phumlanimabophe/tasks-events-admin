@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Register{% endblock title %}
+
+{% block content %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+
+<div class="pc-container">
+  <div class="pc-content">
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <div class="page-header-title">
+              <h5 class="mb-0">Create New User</h5>
+            </div>
+            <ul class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Admin</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Register</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Section -->
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+    <div class="text-center">
+                <a href="{% url "index" %}">
+                  <div>
+                    <img src="{% static "assets/images/PPOTTS Logo 2023.avif" %}" alt="img" style="width: 200px;">
+                  </div>
+                </a>
+              </div>
+          <form method="post" >
+            {% csrf_token %}
+            {% crispy form %}
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+{% endblock content %}

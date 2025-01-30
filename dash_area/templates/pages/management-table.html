@@ -1,0 +1,281 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<head>
+  <!-- Include DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
+
+  <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- Include DataTables JS -->
+  <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <!-- Include Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<div class="pc-container">
+  <div class="pc-content">
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+
+          <div class="col-md-12">
+               <div class="page-header-title">
+              <h5 class="mb-0">Data Table</h5>
+            </div>
+            <ul class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+              <li class="breadcrumb-item"><a href="javascript: void(0)">Admin</a></li>
+              <li class="breadcrumb-item" aria-current="page">Tasks Data Table</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Tasks</h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table id="datatable_tasks" class="table table-striped table-bordered table-hover mb-0">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th style="width: 50px;">
+                        <input type="checkbox" id="select-all">
+                      </th>
+                      <th style="width: 150px;">Title</th>
+                      <th style="width: 120px;">Due Date</th>
+                      <th style="width: 250px;">Description</th>
+                      <th style="width: 100px;">Priority</th>
+                      <th style="width: 100px;">Status</th>
+                      <th style="width: 150px;">Assigned To</th>
+                      <th style="width: 120px;">Created At</th>
+                      <th style="width: 120px;">Updated At</th>
+                      <th style="width: 150px;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer text-center">
+              <button id="prev-page" class="btn btn-secondary btn-sm">Previous</button>
+              <button id="next-page" class="btn btn-secondary btn-sm">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+
+ <div class="modal fade show" id="detailModal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <div class="text-center">
+                      <a href="{% url 'index' %}">
+                        <div>
+                          <img src="{% static 'assets/images/PPOTTS Logo 2023.avif' %}" alt="img" style="width: 200px;">
+                        </div>
+                      </a>
+                    </div>
+
+                    <button id="modalClose2" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+
+                  </div> <div class="modal-body">
+                  <form method="post">
+                    {% csrf_token %}
+
+
+                      <div class="form-group">
+                        <label for="message-text" class="col-form-label"><h6 id="title_event_detail"></h6>
+                        <p id="start_event_detail"></p></label>
+                      </div>
+                      {% csrf_token %}
+                    {% crispy form_edit %}
+
+
+                  </form>
+</div>
+
+
+
+
+                </div>
+              </div>
+            </div>
+
+<form id="delete-form" method="POST" action="{% url 'delete_item_manage' %}">
+    {% csrf_token %}
+    <input type="hidden" name="id" id="delete-id" value="">
+</form>
+
+
+{% endblock content %}
+
+{% block extra_js %}
+
+<script>
+  $(document).ready(function () {
+    var ajaxUrl = "{% url 'ajax_datatable_tasks' %}";
+
+    var table = $('#datatable_tasks').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: ajaxUrl,
+      columns: [
+        {
+          data: null,
+          orderable: false,
+          render: function (data, type, row) {
+            return `<input type="checkbox" class="row-select">`;
+          }
+        },
+        { data: 'title',   orderable: false, },
+        { data: 'due_date' ,   orderable: false,},
+        { data: 'description', orderable: false,},
+        { data: 'priority', orderable: false,},
+        { data: 'status', orderable: false,},
+        { data: 'assigned_to', orderable: false,},
+        { data: 'created_at', orderable: false,},
+        { data: 'updated_at', orderable: false,},
+        {
+          data: null,
+          orderable: false,
+ render: function (data, type, row) {
+    return `
+        <button
+            class="btn btn-success btn-sm update-btn"
+            data-id="${row.id}"
+            data-title="${row.title}"
+            data-due_date="${row.due_date}"
+            data-description="${row.description}"
+            data-priority="${row.priority}"
+            data-status="${row.status}"
+            data-assigned_to="${row.assigned_to}"
+            data-created_at="${row.created_at}"
+            data-updated_at="${row.updated_at}"
+        >
+            Update
+        </button>
+        <button
+            class="btn btn-danger btn-sm delete-btn"
+            data-id="${row.id}"
+            data-title="${row.title}"
+        >
+            Delete
+        </button>
+    `;
+}
+        }
+      ],
+      pageLength: 5,
+      lengthChange: false,
+      ordering: true,
+      order: [[1, 'asc']],
+      pagingType: "simple"
+    });
+
+    $('#prev-page').on('click', function (e) {
+      e.preventDefault();
+      table.page('previous').draw('page');
+    });
+
+    $('#next-page').on('click', function (e) {
+      e.preventDefault();
+      table.page('next').draw('page');
+    });
+
+    $('#select-all').on('click', function () {
+      var rows = table.rows({ search: 'applied' }).nodes();
+      $('input[type="checkbox"]', rows).prop('checked', this.checked);
+    });
+
+function converterToDateTimeFormat(dateString) {
+    if (!dateString) return ''; // Return empty string if no date is provided
+
+    // Parse the ISO date string
+    const date = new Date(dateString);
+
+    // Check if the date is valid
+    if (isNaN(date.getTime())) {
+        console.error('Invalid date format:', dateString);
+        return ''; // Return empty string if the date is invalid
+    }
+
+    // Extract date components
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+$('#datatable_tasks tbody').on('click', '.update-btn', function () {
+    var id = $(this).data('id'); // Get the ID from the button
+
+    // Extract all data attributes
+    var title = $(this).data('title');
+    var dueDate = $(this).data('due_date');
+    var description = $(this).data('description');
+    var priority = $(this).data('priority_value');
+    var status = $(this).data('status');
+    var assignedTo = $(this).data('assigned_to_user');
+    var createdAt = $(this).data('created_at');
+    var updatedAt = $(this).data('updated_at');
+
+    // Convert dates to the correct format
+    var formattedDueDate = converterToDateTimeFormat(dueDate);
+    var formattedCreatedAt = converterToDateTimeFormat(createdAt);
+    var formattedUpdatedAt = converterToDateTimeFormat(updatedAt);
+
+    // Populate form fields
+    document.getElementById('edit_due_date').value = formattedDueDate;
+    document.getElementById('edit_description').value = description;
+    document.getElementById('edit_title').value = title;
+    document.getElementById('edit_priority').value = priority;
+    document.getElementById('edit_status').value = status;
+    document.getElementById('edit_assigned_to').value = assignedTo;
+    document.getElementById('edit_id').value = id;
+
+    // Show the modal
+    $('#detailModal').modal('show');
+});
+
+// Use Bootstrap's modal hide method
+$('#modalClose2').on('click', function () {
+    $('#detailModal').modal('hide'); // Properly hide the modal
+});
+
+$('#datatable_tasks tbody').on('click', '.delete-btn', function () {
+    var id = $(this).data('id');
+    var title = $(this).data('title');
+
+    if (confirm('Are you sure you want to delete this item? ' + title)) {
+        $('#delete-id').val(id);
+        $('#delete-form').submit();
+    }
+});
+  });
+</script>
+{% endblock extra_js %}

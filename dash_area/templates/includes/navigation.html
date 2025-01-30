@@ -1,0 +1,98 @@
+{% load static %}
+
+<header class="pc-header">
+    <div class="header-wrapper">
+        <div class="me-auto pc-mob-drp">
+            <ul class="list-unstyled">
+                <li class="pc-h-item pc-sidebar-collapse">
+                    <a href="#" class="pc-head-link ms-0" id="sidebar-hide">
+                        <i data-feather="menu"></i>
+                    </a>
+                </li>
+                <li class="pc-h-item pc-sidebar-popup">
+                    <a href="#" class="pc-head-link ms-0" id="mobile-collapse">
+                        <i data-feather="menu"></i>
+                    </a>
+                </li>
+                <li class="dropdown pc-h-item">
+                    <a
+                        class="pc-head-link dropdown-toggle arrow-none m-0 trig-drp-search"
+                        data-bs-toggle="dropdown"
+                        href="#"
+                        role="button"
+                        aria-haspopup="false"
+                        aria-expanded="false"
+                    >
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <div class="ms-auto">
+            <ul class="list-unstyled">
+                <li class="dropdown pc-h-item">
+
+                </li>
+                <li class="dropdown pc-h-item header-user-profile">
+                    <a
+                        class="pc-head-link dropdown-toggle arrow-none me-0"
+                        data-bs-toggle="dropdown"
+                        href="#"
+                        role="button"
+                        aria-haspopup="false"
+                        data-bs-auto-close="outside"
+                        aria-expanded="false"
+                    >
+                        <i data-feather="user"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown p-0 overflow-hidden">
+                        <div class="dropdown-header d-flex align-items-center justify-content-between bg-primary">
+                           <div class="d-flex my-2">
+    <div class="flex-shrink-0">
+
+ </div>
+
+</div>
+
+                        </div>
+                        <div class="dropdown-body">
+                            <a href='{% url "profile_update" %}' class="dropdown-item">
+                                <span>
+                                    <svg class="pc-icon text-muted me-2">
+                                        <use xlink:href="#custom-setting-outline"></use>
+                                    </svg>
+                                    <span>Settings</span>
+                                </span>
+                            </a>
+                            <a href='{% url "password_change" %}' class="dropdown-item">
+                                <span>
+                                    <svg class="pc-icon text-muted me-2">
+                                        <use xlink:href="#custom-lock-outline"></use>
+                                    </svg>
+                                    <span>Change Password</span>
+                                </span>
+                            </a>
+                            <div class="d-grid my-2">
+                                {% if request.user.is_authenticated %}
+                                <a href="{% url 'logout' %}" class="btn btn-primary">
+                                    <svg class="pc-icon me-2">
+                                        <use xlink:href="#custom-logout-1-outline"></use></svg>
+                                    Logout
+                                </a>
+                                {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-primary">
+                                    <svg class="pc-icon me-2">
+                                        <use xlink:href="#custom-logout-1-outline"></use>
+                                    </svg>Login
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</header>
