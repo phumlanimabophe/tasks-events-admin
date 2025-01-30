@@ -29,6 +29,8 @@ from django.db.models import Count
 from datetime import datetime
 from django.conf import settings
 from .models import Task, Profile, Status, User
+from django.contrib.auth import get_user_model
+from datetime import datetime
 
 
 def user_login_view(request):
@@ -142,14 +144,6 @@ def password_reset_done(request):
 def password_reset_complete(request):
     return render(request, 'accounts/password_reset_complete.html')
 
-
-from django.contrib.auth import get_user_model
-from django.shortcuts import render
-from django.db.models import Count
-from datetime import datetime
-from .models import Task, Status, Profile
-
-
 def index(request):
     context = {}
     if request.user.is_authenticated:
@@ -185,7 +179,6 @@ def index(request):
         for assigned in task_assigned_to_counts:
             assigned['percentage'] = (assigned['count'] / total_assigned_tasks) * 100 if total_assigned_tasks > 0 else 0
 
-        # Fetching user data
         users = get_user_model().objects.all().prefetch_related('profile')
         for user in users:
             user.is_admin = user.is_staff
