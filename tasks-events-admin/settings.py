@@ -26,7 +26,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'crispy_forms',
     'crispy_bootstrap4',
-    'dash_area.apps.DashAreaConfig'
+    'dash_area.apps.DashAreaConfig',
+    'django_browser_reload',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
