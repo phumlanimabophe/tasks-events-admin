@@ -40,6 +40,8 @@ pip install -r requirements.txt
 ### Run Database Migrations
 
 ```bash
+python manage.py collectstatic
+
 python manage.py makemigrations
 python manage.py migrate
 ```
