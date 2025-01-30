@@ -37,11 +37,5 @@ venv/
 # PyCharm specific
 *.iml
 
-# Sphinx documentation
-docs/_build/
 
-# Jupyter Notebook
-.ipynb_checkpoints/
-
-# Miscellaneous
 .DS_Store

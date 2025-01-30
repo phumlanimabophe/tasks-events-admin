@@ -142,69 +142,61 @@ def password_reset_done(request):
 def password_reset_complete(request):
     return render(request, 'accounts/password_reset_complete.html')
 
+
+from django.contrib.auth import get_user_model
+from django.shortcuts import render
+from django.db.models import Count
+from datetime import datetime
+from .models import Task, Status, Profile
+
+
 def index(request):
+    context = {}
     if request.user.is_authenticated:
-        tasks = Task.objects.all().select_related('priority')
-
+        tasks = Task.objects.select_related('priority')
         priority_counts = {i: 0 for i in range(1, 11)}
-
         for task in tasks:
             priority_counts[task.priority.value] += 1
+
         total_tasks = sum(priority_counts.values())
+        priority_percentages = {
+            i: (priority_counts[i] / total_tasks) * 100 if total_tasks > 0 else 0 for i in range(1, 11)
+        }
+        priorities = [
+            {'priority_value': i, 'count': priority_counts[i], 'percentage': priority_percentages[i]}
+            for i in range(1, 11)
+        ]
 
-        priority_percentages = {}
-        for priority_value, count in priority_counts.items():
-            if total_tasks > 0:
-                priority_percentages[priority_value] = (count / total_tasks) * 100
-            else:
-                priority_percentages[priority_value] = 0
-
-        priorities = []
-        for i in range(1, 11):
-            priorities.append({
-                'priority_value': i,
-                'count': priority_counts[i],
-                'percentage': priority_percentages[i]
-            })
-
+        # Task status and assignment data
         task_status_counts = Task.objects.values('status').annotate(count=Count('status'))
         task_assigned_to_counts = Task.objects.values('assigned_to').annotate(count=Count('assigned_to'))
         overdue_tasks = Task.objects.filter(due_date__lt=datetime.now(), status__name="Pending")
-
         status_distribution = {status.name: 0 for status in Status.objects.all()}
         for task in tasks:
             status_distribution[task.status.name] += 1
 
         total_status_tasks = sum(status_distribution.values())
-        status_percentages = {status: (count / total_status_tasks) * 100 if total_status_tasks > 0 else 0 for
-                              status, count in status_distribution.items()}
+        status_percentages = {
+            status: (count / total_status_tasks) * 100 if total_status_tasks > 0 else 0
+            for status, count in status_distribution.items()
+        }
 
         total_assigned_tasks = sum(assigned['count'] for assigned in task_assigned_to_counts)
         for assigned in task_assigned_to_counts:
             assigned['percentage'] = (assigned['count'] / total_assigned_tasks) * 100 if total_assigned_tasks > 0 else 0
 
-        users = User.objects.all()
+        # Fetching user data
+        users = get_user_model().objects.all().prefetch_related('profile')
         for user in users:
             user.is_admin = user.is_staff
-            user.is_superuser = user.is_superuser
             user.is_user = not user.is_superuser and not user.is_staff
 
-        try:
-            users_profile = Profile.objects.filter(user=request.user).first()
+        # Fetch current user's profile image if available
+        users_profile = Profile.objects.filter(user=request.user).first()
+        if users_profile and users_profile.image:
+            users_profile.image = settings.MEDIA_URL + str(users_profile.image)
 
-            if users_profile and users_profile.image:
-                image_url = settings.MEDIA_URL + str(users_profile.image)
-                users_profile.image = image_url
-
-        except Exception as e:
-            users_profile = Profile(
-                user=request.user,
-                first_name="update",
-                last_name="Profile",
-                email="",
-                image=""
-            )
-
+        # Prepare context data
         context = {
             'segment': 'dashboard',
             'priorities': priorities,
@@ -214,11 +206,8 @@ def index(request):
             'assigned_tasks': task_assigned_to_counts,
             'task_status_counts': task_status_counts,
             'total_tasks': total_tasks,
-            'users_profile': users_profile
+            'users': users
         }
-    else:
-        context = {}
-
     return render(request, "pages/index.html", context)
 
 

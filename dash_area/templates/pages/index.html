@@ -50,18 +50,18 @@
                                     {% if priority.count == 0 %}
                                         0 <i class="fas fa-caret-up text-success ms-2"></i>
                                     {% else %}
-                                        {{ priority.percentage|floatformat:2 }}% 
+                                        {{ priority.percentage|floatformat:2 }}%
                                         <i class="fas fa-caret-up text-success ms-2"></i>
                                     {% endif %}
                                 </h6>
                             </div>
                         </div>
                         <div class="progress mt-2 mb-2" style="height: 8px;">
-                            <div class="progress-bar bg-warning" 
-                                 role="progressbar" 
-                                 style="width: {{ priority.percentage }}%;" 
-                                 aria-valuenow="{{ priority.percentage }}" 
-                                 aria-valuemin="0" 
+                            <div class="progress-bar bg-warning"
+                                 role="progressbar"
+                                 style="width: {{ priority.percentage }}%;"
+                                 aria-valuenow="{{ priority.percentage }}"
+                                 aria-valuemin="0"
                                  aria-valuemax="100">
                             </div>
                         </div>
@@ -77,12 +77,10 @@
             </div>
         </div>
     </div>
-    
 
-    <!-- Right Side (2 Cards on top, 1 below) -->
+
     <div class="col-xl-8 col-md-12 mb-4">
         <div class="row">
-            <!-- Task Status Card -->
             <div class="col-12 col-md-6 mb-4 d-flex">
                 <div class="card w-100 d-flex flex-column">
                     <div class="card-body d-flex flex-column" style="min-height: 180px;">
@@ -122,17 +120,17 @@
                     </div>
                     <div class="progress mt-4" style="height: 10px;">
                         {% for assigned in assigned_tasks %}
-                        <div class="progress-bar bg-brand-color-{{ forloop.counter }}" 
-                            role="progressbar" 
-                            style="width: {{ assigned.percentage }}%;" 
-                            aria-valuenow="{{ assigned.percentage }}" 
-                            aria-valuemin="0" 
+                        <div class="progress-bar bg-brand-color-{{ forloop.counter }}"
+                            role="progressbar"
+                            style="width: {{ assigned.percentage }}%;"
+                            aria-valuenow="{{ assigned.percentage }}"
+                            aria-valuemin="0"
                             aria-valuemax="100"
                             title="{{ assigned.assigned_to }}: {{ assigned.percentage }}%">
                         </div>
                         {% endfor %}
                     </div>
-                
+
                     {% endif %}
                 </div>
             </div>
@@ -183,7 +181,7 @@
                                         <span class="badge me-2 {% if user.is_admin %}bg-success{% else %}bg-danger{% endif %}">
                                             Admin
                                         </span>
-                                  
+
                                         <span class="badge me-2 {% if user.is_user %}bg-success{% else %}bg-danger{% endif %}">
                                             User
                                         </span>

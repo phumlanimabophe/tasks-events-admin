@@ -1,6 +1,6 @@
 # Task Manager in Django
 
-[Optional: Include a video thumbnail here if applicable]
+[Video](https://www.canva.com/design/DAGdsYEGWVM/ttqBUvmKS5T6_tsWx0q3Qg/watch)
 
 ## Overview:
 **This project is a robust task management system built with Django, designed for efficient task creation, assignment, prioritization, and tracking. It features secure user authentication, role-based access control, and a user-friendly interface powered by Bootstrap. Tasks can be categorized by status, assigned to users, and given due dates for better organization. The system ensures secure data handling using environment variables and supports both SQLite and PostgreSQL for flexible database management. With Django-Crispy-Forms, form handling is streamlined, enhancing usability.
@@ -25,6 +25,8 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+# Add .env
+locate and add to main folder
 
 ### Configure Database (if using PostgreSQL)
 
