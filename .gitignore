@@ -12,8 +12,8 @@ dist/
 # Django stuff:
 *.log
 local_settings.py
-db.sqlite3
-db.sqlite3-journal
+#db.sqlite3
+#db.sqlite3-journal
 
 # Django Migrations (exclude migration files but keep folder and init.py file)
 **/migrations/*
