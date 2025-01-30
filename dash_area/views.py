@@ -195,7 +195,6 @@ def index(request):
             if users_profile and users_profile.image:
                 image_url = settings.MEDIA_URL + str(users_profile.image)
                 users_profile.image = image_url
-            print(users_profile.image)
 
         except Exception as e:
             users_profile = Profile(
@@ -249,7 +248,7 @@ class CalendarViewNew(LoginRequiredMixin, generic.View):
 
         for task in tasks_data:
             task_fields = task['fields']
-            print(task_fields['created_by'])
+            
             if task_fields['due_date']:
                 calender_date = task_fields['due_date']
             else:
